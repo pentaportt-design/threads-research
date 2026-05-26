@@ -12,8 +12,7 @@ from datetime import datetime
 
 # ── 설정 ──────────────────────────────────────────────
 APIFY_API_TOKEN = os.environ["APIFY_API_TOKEN"]
-ACTOR_ID = "igview-owner/threads-search-scraper"
-
+ACTOR_ID = "FP43CZrdHtiSNn4SY"
 KEYWORDS = {
     "자영업": ["자영업", "소상공인"],
     "외식업": ["외식업", "식당창업"],
