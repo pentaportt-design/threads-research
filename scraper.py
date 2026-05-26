@@ -32,7 +32,7 @@ def run_apify_actor(keyword: str, max_results: int = 20) -> list:
     payload = {"searchQuery": keyword, "maxResults": max_results, "sortBy": "top"}
     try:
         res = requests.post(url, params=params, json=payload, timeout=120)
-        if res.status_code == 200:
+        if res.status_code in [200, 201]:
             return res.json()
         else:
             print(f"  Apify 오류 {res.status_code}: {res.text[:200]}")
