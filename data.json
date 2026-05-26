@@ -1,0 +1,37 @@
+{
+  "updated_at": "2026-05-26T08:00:30.683492",
+  "viral_posts": [],
+  "growing_accounts": [],
+  "keywords": [
+    {
+      "name": "자영업",
+      "emoji": "🏪",
+      "post_count": 0,
+      "top_posts": []
+    },
+    {
+      "name": "외식업",
+      "emoji": "🍽️",
+      "post_count": 0,
+      "top_posts": []
+    },
+    {
+      "name": "음식",
+      "emoji": "🥘",
+      "post_count": 0,
+      "top_posts": []
+    },
+    {
+      "name": "주부",
+      "emoji": "🏠",
+      "post_count": 0,
+      "top_posts": []
+    },
+    {
+      "name": "레시피",
+      "emoji": "📖",
+      "post_count": 0,
+      "top_posts": []
+    }
+  ]
+}
