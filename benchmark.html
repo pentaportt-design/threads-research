@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>땡초장 콘텐츠 벤치마킹</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E8341A; --orange: #F5622A; --red-light: #FF5C3F;
+  --bg: #0C0C0C; --bg2: #141414; --bg3: #1C1C1C; --bg4: #242424;
+  --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+  --text: #F0EDE8; --text-muted: #888; --text-dim: #555;
+  --green: #2ECC71; --blue: #3498DB; --yellow: #F1C40F;
+  --mono: 'Space Mono', monospace; --sans: 'Noto Sans KR', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:var(--sans); min-height:100vh; overflow-x:hidden; }
+
+header {
+  position:sticky; top:0; z-index:100;
+  background:rgba(12,12,12,0.92); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 32px; height:56px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.logo { display:flex; align-items:center; gap:10px; font-family:var(--mono); font-weight:700; font-size:14px; }
+.logo-dot { width:8px; height:8px; background:var(--red); border-radius:50%; box-shadow:0 0 8px var(--red); }
+.nav-links { display:flex; gap:4px; }
+.nav-link { padding:6px 14px; border-radius:5px; font-size:12px; font-weight:700; text-decoration:none; color:var(--text-muted); transition:all .15s; font-family:var(--sans); }
+.nav-link:hover { color:var(--text); background:var(--bg3); }
+.nav-link.active { background:var(--red); color:#fff; }
+
+main { max-width:1280px; margin:0 auto; padding:32px 24px; }
+
+/* 상단 설명 */
+.hero { margin-bottom:28px; }
+.hero-title { font-size:22px; font-weight:900; margin-bottom:6px; }
+.hero-title span { color:var(--red); }
+.hero-desc { font-size:13px; color:var(--text-muted); line-height:1.6; }
+
+/* 프로필 설정 박스 */
+.profile-box {
+  background:var(--bg2); border:1px solid var(--border2);
+  border-radius:10px; padding:20px; margin-bottom:24px;
+}
+.profile-box-title { font-size:12px; font-family:var(--mono); text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted); margin-bottom:14px; }
+.profile-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.profile-field label { display:block; font-size:11px; color:var(--text-dim); margin-bottom:5px; font-family:var(--mono); }
+.profile-field input, .profile-field textarea, .profile-field select {
+  width:100%; background:var(--bg3); border:1px solid var(--border);
+  border-radius:6px; padding:8px 12px; color:var(--text);
+  font-family:var(--sans); font-size:13px; outline:none; transition:border .15s;
+}
+.profile-field textarea { resize:vertical; min-height:72px; }
+.profile-field input:focus, .profile-field textarea:focus { border-color:rgba(232,52,26,.4); }
+.profile-field.full { grid-column:1/-1; }
+
+/* 게시글 선택 영역 */
+.post-select-area { margin-bottom:24px; }
+.section-title { font-size:13px; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.section-title .badge { font-size:10px; font-family:var(--mono); padding:2px 7px; background:rgba(232,52,26,.12); border:1px solid rgba(232,52,26,.2); border-radius:3px; color:var(--red-light); }
+
+.post-select-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:10px; }
+
+.post-select-card {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:9px; padding:14px; cursor:pointer; transition:all .15s; position:relative;
+}
+.post-select-card:hover { border-color:rgba(232,52,26,.25); }
+.post-select-card.selected { border-color:var(--red); background:rgba(232,52,26,.05); }
+.post-select-card.selected::after {
+  content:'✓'; position:absolute; top:10px; right:12px;
+  width:20px; height:20px; background:var(--red); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; color:#fff; font-weight:700;
+  line-height:20px; text-align:center;
+}
+.card-cat { font-size:10px; font-family:var(--mono); font-weight:700; text-transform:uppercase; padding:2px 7px; border-radius:3px; margin-bottom:7px; display:inline-block; }
+.card-body { font-size:12px; color:#bbb; line-height:1.6; margin-bottom:8px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.card-stats { font-size:11px; color:var(--text-dim); font-family:var(--mono); }
+.card-stats span { color:#ff5c3f; font-weight:700; }
+
+/* API 키 입력 */
+.api-section {
+  background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:24px;
+}
+.api-row { display:flex; gap:10px; align-items:center; }
+.api-row label { font-size:12px; color:var(--text-muted); white-space:nowrap; font-family:var(--mono); }
+.api-row input {
+  flex:1; background:var(--bg3); border:1px solid var(--border);
+  border-radius:6px; padding:8px 12px; color:var(--text);
+  font-family:var(--mono); font-size:12px; outline:none;
+}
+.api-row input:focus { border-color:rgba(232,52,26,.4); }
+.api-note { font-size:11px; color:var(--text-dim); margin-top:8px; }
+.api-note a { color:var(--blue); }
+
+/* 생성 버튼 */
+.generate-btn {
+  width:100%; padding:14px; background:var(--red); border:none; border-radius:8px;
+  color:#fff; font-size:15px; font-weight:700; font-family:var(--sans);
+  cursor:pointer; transition:all .15s; margin-bottom:24px; display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.generate-btn:hover { background:var(--red-light); }
+.generate-btn:disabled { background:var(--bg4); color:var(--text-dim); cursor:not-allowed; }
+.generate-btn .spinner { width:16px; height:16px; border:2px solid rgba(255,255,255,.3); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; display:none; }
+.generate-btn.loading .spinner { display:block; }
+.generate-btn.loading .btn-text { opacity:.6; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* 결과 영역 */
+.results-area { display:none; }
+.results-area.show { display:block; }
+
+.result-card {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:10px; margin-bottom:14px; overflow:hidden;
+}
+.result-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 16px; border-bottom:1px solid var(--border);
+  background:var(--bg3);
+}
+.result-header-left { display:flex; align-items:center; gap:10px; }
+.result-num { width:24px; height:24px; background:var(--red); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; font-family:var(--mono); flex-shrink:0; }
+.result-title { font-size:13px; font-weight:700; }
+.result-sub { font-size:11px; color:var(--text-muted); margin-top:1px; }
+.copy-btn {
+  padding:5px 12px; background:none; border:1px solid var(--border2);
+  border-radius:5px; color:var(--text-muted); font-size:11px; font-family:var(--mono);
+  cursor:pointer; transition:all .15s;
+}
+.copy-btn:hover { border-color:var(--green); color:var(--green); }
+.copy-btn.copied { border-color:var(--green); color:var(--green); }
+
+.result-body { padding:16px; }
+
+/* 분석 vs 변환 나란히 */
+.result-split { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.split-box { background:var(--bg3); border-radius:7px; padding:14px; }
+.split-label { font-size:10px; font-family:var(--mono); text-transform:uppercase; letter-spacing:.08em; color:var(--text-dim); margin-bottom:8px; }
+.split-content { font-size:13px; line-height:1.7; color:#CCC; white-space:pre-wrap; }
+.split-content.highlight { color:var(--text); font-size:14px; line-height:1.8; }
+
+/* 인사이트 태그들 */
+.insight-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+.insight-tag { padding:3px 10px; border-radius:20px; font-size:11px; font-family:var(--mono); }
+.insight-tag.hook { background:rgba(241,196,15,.1); color:#F1C40F; border:1px solid rgba(241,196,15,.2); }
+.insight-tag.emotion { background:rgba(232,52,26,.1); color:var(--red-light); border:1px solid rgba(232,52,26,.2); }
+.insight-tag.cta { background:rgba(46,204,113,.1); color:var(--green); border:1px solid rgba(46,204,113,.2); }
+.insight-tag.format { background:rgba(52,152,219,.1); color:var(--blue); border:1px solid rgba(52,152,219,.2); }
+
+/* 빈 상태 */
+.empty { text-align:center; padding:60px 20px; color:var(--text-dim); }
+.empty-icon { font-size:40px; margin-bottom:12px; opacity:.4; }
+.empty-title { font-size:15px; font-weight:700; color:var(--text-muted); margin-bottom:6px; }
+.empty-desc { font-size:12px; line-height:1.6; }
+
+/* 선택 카운터 */
+.select-counter { font-size:12px; color:var(--text-muted); font-family:var(--mono); margin-left:auto; }
+.select-counter span { color:var(--red); font-weight:700; }
+
+@media (max-width:768px) {
+  main { padding:16px; }
+  .profile-grid { grid-template-columns:1fr; }
+  .result-split { grid-template-columns:1fr; }
+  .post-select-grid { grid-template-columns:1fr; }
+  header { padding:0 16px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><div class="logo-dot"></div>땡초장 THREADS 리서치</div>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">📊 대시보드</a>
+    <a href="benchmark.html" class="nav-link active">✍️ 벤치마킹</a>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="hero-title">핫한 게시글 → <span>내 콘텐츠</span>로 변환</div>
+    <div class="hero-desc">바이럴 게시글을 분석하고 땡초장 브랜드 톤으로 즉시 재작성해드려요. 훅, 감정선, CTA 구조를 유지하면서 내 이야기로 바꿔줍니다.</div>
+  </div>
+
+  <!-- 내 계정 프로필 설정 -->
+  <div class="profile-box">
+    <div class="profile-box-title">⚙️ 내 계정 설정 (한 번만 입력하면 저장됨)</div>
+    <div class="profile-grid">
+      <div class="profile-field">
+        <label>브랜드명</label>
+        <input type="text" id="brand-name" placeholder="예: 팔감댁" value="팔감댁 땡초장">
+      </div>
+      <div class="profile-field">
+        <label>계정 성격</label>
+        <select id="brand-tone">
+          <option value="진정성 있는 소상공인 사장님" selected>진정성 있는 소상공인 사장님</option>
+          <option value="친근한 자영업자">친근한 자영업자</option>
+          <option value="전문 식품 브랜드">전문 식품 브랜드</option>
+          <option value="유머러스한 푸드 크리에이터">유머러스한 푸드 크리에이터</option>
+        </select>
+      </div>
+      <div class="profile-field full">
+        <label>브랜드 소개 (AI가 참고할 핵심 정보)</label>
+        <textarea id="brand-desc">국내산 청양고추로 만든 수제 땡초장. 매일 새벽 엄마랑 함께 손수 만드는 소량 제작. 자극적이지 않고 깊고 칼칼한 맛. 비빔국수·계란후라이·밥·두부 등 뭐든 밥도둑으로 만들어줌. 90살까지 팔감댁 운영이 목표인 진정성 있는 소상공인. 스레드에서 고객들과 동네 이웃처럼 소통 중. 스레드 팔로워 3000명 돌파, 스레드에서 판도 먹고 싶다는 목표로 성장 중.</textarea>
+      </div>
+      <div class="profile-field full">
+        <label>말투 스타일 (AI가 참고할 글쓰기 패턴)</label>
+        <textarea id="brand-style">- 짧은 문장 + 줄바꿈으로 호흡 쪼개기
+- "솔직히", "사실", "근데", "그래서" 로 자연스럽게 이어가기
+- 반말 기반이지만 고객한테는 존댓말 감사 인사 ("고맙습니다", "감사드립니다 :)")
+- 이모지는 😊 🙏 😅 😀 🥹 위주로 1~2개만 자연스럽게
+- 실패·고민도 솔직하게 털어놓는 고백형 스타일
+- 마지막에 따뜻한 마무리 or 독자에게 말 걸기</textarea>
+      </div>
+      <div class="profile-field full">
+        <label>피해야 할 표현</label>
+        <input type="text" id="brand-avoid" value="과장된 광고 문구, 영어 섞기, 격식체, 해요체 남발, 너무 긴 문장"></div>
+    </div>
+  </div>
+
+  <!-- API 키 -->
+  <div class="api-section">
+    <div class="api-row">
+      <label>ANTHROPIC API KEY</label>
+      <input type="password" id="api-key" placeholder="sk-ant-api03-...">
+    </div>
+    <div class="api-note">
+      AI 변환에 필요해요. <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>에서 무료로 발급 가능 (월 $5 크레딧 제공) · 입력값은 브라우저에만 저장되며 외부 전송 안 됩니다.
+    </div>
+  </div>
+
+  <!-- 게시글 선택 -->
+  <div class="post-select-area">
+    <div class="section-title">
+      🔥 변환할 게시글 선택
+      <span class="badge">복수 선택 가능</span>
+      <span class="select-counter"><span id="selected-count">0</span>개 선택됨</span>
+    </div>
+    <div class="post-select-grid" id="post-select-grid"></div>
+  </div>
+
+  <!-- 생성 버튼 -->
+  <button class="generate-btn" id="generate-btn" onclick="generateAll()" disabled>
+    <div class="spinner"></div>
+    <span class="btn-text">✍️ 선택한 게시글 벤치마킹 시작</span>
+  </button>
+
+  <!-- 결과 -->
+  <div class="results-area" id="results-area">
+    <div class="section-title">✅ 변환 결과</div>
+    <div id="results-list"></div>
+  </div>
+</main>
+
+<script>
+const SAMPLE_POSTS = [
+  { id:1, cat:"레시피", catColor:"#e8341a", catBg:"rgba(232,52,26,.1)", views:284000, likes:12400, username:"장레시피연구소", content:"땡초장 하나면 냉장고 파먹기 끝! 어제 남은 두부에 땡초장 올리고 참기름 한 방울만 둘렀는데 남편이 밥 두 공기를 비웠어요 🥹 진짜 마법의 소스" },
+  { id:2, cat:"주부", catColor:"#9b59b6", catBg:"rgba(155,89,182,.1)", views:198000, likes:9800, username:"자취요리맘", content:"주부 10년차인데 이제야 알게 된 땡초장 활용법 5가지 공유합니다. 비빔국수, 삼겹살 쌈장, 두부조림, 계란후라이, 오이무침... 하나 사면 한 달은 써요" },
+  { id:3, cat:"자영업", catColor:"#e67e22", catBg:"rgba(230,126,34,.1)", views:156000, likes:7200, username:"식당차장사장님", content:"손님들이 자꾸 이거 어디서 파냐고 물어봐서요. 저희 가게 양념 비결이 사실 시판 땡초장에 마늘 조금 더 넣은 거예요 😅 자영업자분들 이거 써보세요" },
+  { id:4, cat:"음식", catColor:"#e74c3c", catBg:"rgba(231,76,60,.1)", views:134000, likes:6100, username:"부산미식가", content:"부산 깡통시장 vs 서울 광장시장 떡볶이 소스 비교해봤어요. 결론은 집에서 땡초장 기반으로 만드는 게 두 곳 중간 맛이 나더라고요. 레시피 원하시면 댓글" },
+  { id:5, cat:"외식업", catColor:"#27ae60", catBg:"rgba(39,174,96,.1)", views:121000, likes:5400, username:"카페하는언니", content:"분식집 창업 1년차 솔직 후기. 소스 원가 줄이려다 맛 망한 경험 있어요. 결국 좋은 소스 쓰는 게 맞더라고요. 저는 지금 땡초장 베이스로 정착했어요" },
+  { id:6, cat:"레시피", catColor:"#e8341a", catBg:"rgba(232,52,26,.1)", views:112000, likes:4900, username:"매일집밥", content:"오늘 저녁 뭐 먹을지 고민될 때 제가 쓰는 공식: 냉장고 재료 + 땡초장 = 밥도둑. 오늘은 콩나물이랑 버무렸는데 온가족이 다 좋아했어요" },
+];
+
+let selectedIds = new Set();
+
+function fmtViews(n) {
+  if (n >= 10000) return (n/10000).toFixed(1)+'만';
+  if (n >= 1000) return (n/1000).toFixed(1)+'천';
+  return n.toString();
+}
+
+function loadPosts() {
+  // data.json 있으면 실제 데이터, 없으면 샘플
+  fetch('./data.json?t='+Date.now())
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      const posts = data ? data.viral_posts : SAMPLE_POSTS;
+      renderPostCards(posts);
+    })
+    .catch(() => renderPostCards(SAMPLE_POSTS));
+}
+
+function renderPostCards(posts) {
+  const grid = document.getElementById('post-select-grid');
+  grid.innerHTML = posts.map(p => `
+    <div class="post-select-card" id="card-${p.id}" onclick="toggleSelect(${p.id}, this, ${JSON.stringify(p).replace(/"/g,'&quot;')})">
+      <div class="card-cat" style="background:${p.catBg||'rgba(136,136,136,.1)'};color:${p.catColor||'#888'}">${p.cat}</div>
+      <div class="card-body">${p.content}</div>
+      <div class="card-stats">👁 <span>${fmtViews(p.views)}</span> &nbsp; ❤️ ${fmtViews(p.likes)} &nbsp; @${p.username||p.display_name||''}</div>
+    </div>
+  `).join('');
+  window._posts = posts;
+}
+
+function toggleSelect(id, el, post) {
+  if (selectedIds.has(id)) {
+    selectedIds.delete(id);
+    el.classList.remove('selected');
+  } else {
+    selectedIds.add(id);
+    el.classList.add('selected');
+    if (!window._selectedPosts) window._selectedPosts = {};
+    window._selectedPosts[id] = post;
+  }
+  document.getElementById('selected-count').textContent = selectedIds.size;
+  document.getElementById('generate-btn').disabled = selectedIds.size === 0 || !document.getElementById('api-key').value.trim();
+}
+
+document.getElementById('api-key').addEventListener('input', function() {
+  document.getElementById('generate-btn').disabled = selectedIds.size === 0 || !this.value.trim();
+  localStorage.setItem('anthropic_api_key', this.value);
+});
+
+// 저장된 설정 불러오기
+window.addEventListener('load', () => {
+  const savedKey = localStorage.getItem('anthropic_api_key');
+  if (savedKey) document.getElementById('api-key').value = savedKey;
+  ['brand-name','brand-tone','brand-desc','brand-avoid'].forEach(id => {
+    const saved = localStorage.getItem(id);
+    if (saved) document.getElementById(id).value = saved;
+  });
+  ['brand-name','brand-tone','brand-desc','brand-avoid'].forEach(id => {
+    document.getElementById(id).addEventListener('input', function() {
+      localStorage.setItem(id, this.value);
+    });
+  });
+  loadPosts();
+});
+
+async function generateAll() {
+  const apiKey = document.getElementById('api-key').value.trim();
+  if (!apiKey) return alert('API 키를 입력해주세요.');
+  if (selectedIds.size === 0) return alert('게시글을 선택해주세요.');
+
+  const btn = document.getElementById('generate-btn');
+  btn.disabled = true;
+  btn.classList.add('loading');
+  btn.querySelector('.btn-text').textContent = '분석 중...';
+
+  const brandName = document.getElementById('brand-name').value;
+  const brandTone = document.getElementById('brand-tone').value;
+  const brandDesc = document.getElementById('brand-desc').value;
+  const brandAvoid = document.getElementById('brand-avoid').value;
+
+  const resultsArea = document.getElementById('results-area');
+  const resultsList = document.getElementById('results-list');
+  resultsArea.classList.add('show');
+  resultsList.innerHTML = '';
+
+  const selectedPosts = (window._posts || SAMPLE_POSTS).filter(p => selectedIds.has(p.id));
+
+  for (let i = 0; i < selectedPosts.length; i++) {
+    const post = selectedPosts[i];
+    btn.querySelector('.btn-text').textContent = `분석 중... (${i+1}/${selectedPosts.length})`;
+
+    const placeholder = document.createElement('div');
+    placeholder.className = 'result-card';
+    placeholder.innerHTML = `<div style="padding:20px;color:var(--text-muted);font-size:13px;text-align:center">⏳ @${post.username||post.display_name} 게시글 분석 중...</div>`;
+    resultsList.appendChild(placeholder);
+
+    try {
+      const result = await analyzePost(post, brandName, brandTone, brandDesc, brandAvoid, apiKey);
+      placeholder.outerHTML = renderResult(post, result, i+1);
+    } catch(e) {
+      placeholder.innerHTML = `<div style="padding:20px;color:#e74c3c;font-size:13px">❌ 오류: ${e.message}</div>`;
+    }
+
+    await new Promise(r => setTimeout(r, 500));
+  }
+
+  btn.disabled = false;
+  btn.classList.remove('loading');
+  btn.querySelector('.btn-text').textContent = '✍️ 선택한 게시글 벤치마킹 시작';
+  resultsArea.scrollIntoView({ behavior:'smooth' });
+}
+
+async function analyzePost(post, brandName, brandTone, brandDesc, brandAvoid, apiKey) {
+  const brandStyle = document.getElementById('brand-style') ? document.getElementById('brand-style').value : '';
+  const prompt = `당신은 SNS 콘텐츠 전략가입니다. 다음 Threads 바이럴 게시글을 분석하고, 아래 계정 스타일로 완전히 재작성해주세요.
+
+[원본 게시글]
+카테고리: ${post.cat}
+조회수: ${Math.round(post.views/10000*10)/10}만
+내용: ${post.content}
+
+[계정 정보]
+브랜드명: ${brandName}
+계정 성격: ${brandTone}
+브랜드 소개: ${brandDesc}
+${brandStyle ? '말투/글쓰기 패턴:\n'+brandStyle : ''}
+${brandAvoid ? '절대 쓰지 말 것: '+brandAvoid : ''}
+
+[재작성 필수 규칙]
+1. 짧은 문장을 줄바꿈으로 끊어서 호흡을 만들 것
+2. "솔직히", "사실", "근데", "그래서" 같은 구어체 연결어 자연스럽게 사용
+3. 고백형 or 일상 에피소드로 시작해서 제품으로 자연스럽게 연결
+4. 이모지는 😊 🙏 😅 😀 🥹 중 1~2개만, 문장 끝에만
+5. 마지막 줄은 독자에게 말 걸거나 따뜻하게 마무리
+6. 150자 내외, 광고스럽지 않게
+
+아래 JSON 형식으로만 응답하세요 (마크다운 코드블록 없이, 순수 JSON만):
+{
+  "hook": "이 게시글의 핵심 훅 전략 (한 문장)",
+  "emotion": "활용된 감정 트리거",
+  "structure": "훅→전개→연결→마무리 구조 설명",
+  "cta": "CTA 방식",
+  "rewritten": "팔감댁 스타일로 재작성한 게시글 (줄바꿈 포함, 실제 올릴 수 있는 완성본)",
+  "hashtags": ["땡초장", "팔감댁", "카테고리관련태그"],
+  "tip": "이 게시글 구조에서 배울 핵심 인사이트 한 줄"
+}`;
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message || `API 오류 ${res.status}`);
+  }
+
+  const data = await res.json();
+  const text = data.content[0].text.replace(/```json|```/g,'').trim();
+  return JSON.parse(text);
+}
+
+function renderResult(post, r, num) {
+  const hashtags = (r.hashtags||[]).map(h => `<span class="insight-tag format">#${h.replace('#','')}</span>`).join('');
+  return `
+  <div class="result-card">
+    <div class="result-header">
+      <div class="result-header-left">
+        <div class="result-num">${num}</div>
+        <div>
+          <div class="result-title">@${post.username||post.display_name} · ${post.cat}</div>
+          <div class="result-sub">👁 ${Math.round(post.views/10000*10)/10}만 조회 · ❤️ ${Math.round(post.likes/1000*10)/10}천</div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick="copyText(this, \`${(r.rewritten||'').replace(/`/g,"'")}\n\n${(r.hashtags||[]).map(h=>'#'+h.replace('#','')).join(' ')}\`)">복사</button>
+    </div>
+    <div class="result-body">
+      <div class="result-split">
+        <div class="split-box">
+          <div class="split-label">📊 원본 분석</div>
+          <div class="split-content">🪝 훅: ${r.hook||'-'}\n\n💡 구조: ${r.structure||'-'}\n\n📣 CTA: ${r.cta||'-'}</div>
+          <div class="insight-tags">
+            <span class="insight-tag hook">훅</span>
+            <span class="insight-tag emotion">감정: ${r.emotion||'-'}</span>
+          </div>
+        </div>
+        <div class="split-box">
+          <div class="split-label">✍️ 내 콘텐츠로 변환</div>
+          <div class="split-content highlight">${r.rewritten||'-'}</div>
+          <div class="insight-tags" style="margin-top:10px">${hashtags}</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;padding:10px 14px;background:rgba(241,196,15,.06);border:1px solid rgba(241,196,15,.15);border-radius:6px;font-size:12px;color:#F1C40F">
+        💡 인사이트: ${r.tip||'-'}
+      </div>
+    </div>
+  </div>`;
+}
+
+function copyText(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ 복사됨';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>
